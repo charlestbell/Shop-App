@@ -5,9 +5,9 @@ import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
-
 import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
+import ordersReducer from './store/reducers/orders';
 import ShopNavigator from './navigation/shopNavigator';
 
 let devOnlyDevTools = null;
@@ -18,6 +18,7 @@ if (__DEV__) {
 const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
+  orders: ordersReducer,
 });
 
 const store = createStore(rootReducer, devOnlyDevTools);

@@ -15,20 +15,15 @@ export default (state = initialState, action) => {
       let updatedOrNewCartItem;
 
       if (state.items[addedProduct.id]) {
-        //alrady have item in the cart
-        const updatedOrNewCartItem = new CartItem(
+        //already have item in the cart
+        updatedOrNewCartItem = new CartItem(
           state.items[addedProduct.id].quantity + 1,
           prodPrice,
           prodTitle,
-          state.itemes[addedProduct.id].sum + prodPrice
+          state.items[addedProduct.id].sum + prodPrice
         );
       } else {
-        const updatedOrNewCartItem = new CartItem(
-          1,
-          prodPrice,
-          prodTitle,
-          prodPrice
-        );
+        updatedOrNewCartItem = new CartItem(1, prodPrice, prodTitle, prodPrice);
       }
       return {
         ...state,

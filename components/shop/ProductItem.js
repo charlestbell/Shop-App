@@ -39,7 +39,7 @@ const ProductItem = (props) => {
               />
               <Button
                 color={Colors.primary}
-                title='Cart'
+                title='Add to Cart'
                 onPress={props.onAddToCart}
               />
             </View>
@@ -75,8 +75,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
+    fontFamily: 'open-sans-bold',
   },
-  price: { fontSize: 14, color: '#888' },
+  price: { fontFamily: 'open-sans', fontSize: 14, color: '#888' },
   actions: {
     flexDirection: 'row',
     justifyContent: 'space-between',

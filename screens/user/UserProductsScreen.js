@@ -1,7 +1,9 @@
 import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, Button, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
+import HeaderButton from '../../components/UI/HeaderButton';
 import ProductItem from '../../components/shop/ProductItem';
 
 const UserProductsScreen = (props) => {
@@ -23,10 +25,23 @@ const UserProductsScreen = (props) => {
   );
 };
 
-UserProductsScreen.navigationOptions = {
-  headerTitle: 'Your Products',
+UserProductsScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: 'Your Products',
+    headerLeft: () => {
+      return (
+        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+          <Item
+            title='Menu'
+            iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
+            onPress={() => {
+              navData.navigation.toggleDrawer();
+            }}
+          />
+        </HeaderButtons>
+      );
+    },
+  };
 };
-
-const styles = StyleSheet.create({});
 
 export default UserProductsScreen;

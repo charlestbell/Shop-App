@@ -11,9 +11,9 @@ import cartReducer from './store/reducers/cart';
 import ordersReducer from './store/reducers/orders';
 import ShopNavigator from './navigation/shopNavigator';
 
-let devOnlyDevTools = null;
+let composedMiddleWare = compose(applyMiddleware(ReduxThunk));
 if (__DEV__) {
-  devOnlyDevTools = composeWithDevTools();
+  composedMiddleWare = composeWithDevTools(applyMiddleware(ReduxThunk));
 }
 
 const rootReducer = combineReducers({
@@ -21,11 +21,6 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   orders: ordersReducer,
 });
-
-const composedMiddleWare = compose(
-  applyMiddleware(ReduxThunk),
-  devOnlyDevTools
-);
 
 const store = createStore(rootReducer, composedMiddleWare);
 

@@ -27,12 +27,22 @@ const ProductsOverviewScreen = (props) => {
     setError(null);
     setIsLoading(true);
     try {
-      await dispatch(productsActions.fetchProducts()).then();
+      await dispatch(productsActions.fetchProducts());
     } catch (err) {
       setError(err.message);
     }
     setIsLoading(false);
   }, [dispatch, setIsLoading, setError]);
+
+  useEffect(() => {
+    const willFocusSub = props.navigation.addListener(
+      'willFocus',
+      loadProducts
+    );
+    return () => {
+      willFocusSub.remove();
+    };
+  }, [loadProducts]);
 
   useEffect(() => {
     loadProducts();
@@ -48,7 +58,7 @@ const ProductsOverviewScreen = (props) => {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text>An error ocurred!</Text>
+        <Text>An error occurred!</Text>
         <Button
           title='Try Again'
           onPress={loadProducts}

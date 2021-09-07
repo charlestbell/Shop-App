@@ -10,7 +10,7 @@ import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
 import ordersReducer from './store/reducers/orders';
 import authReducer from './store/reducers/auth';
-import ShopNavigator from './navigation/shopNavigator';
+import NavigationContainer from './navigation/NavigationContainer';
 
 let composedMiddleWare = compose(applyMiddleware(ReduxThunk));
 if (__DEV__) {
@@ -50,7 +50,7 @@ export default App = () => {
 
   return (
     <Provider store={store}>
-      <ShopNavigator />
+      <NavigationContainer />
     </Provider>
   );
 };

@@ -42,13 +42,13 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const EditProductScreen = (props) => {
+const EditProductScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
-  const prodId = props.navigation.getParam('productId');
-  const editedProduct = useSelector((state) =>
-    state.products.userProducts.find((prod) => prod.id === prodId)
+  const prodId = props.route.params ? props.route.params.productId : null;
+  const editedProduct = useSelector(state =>
+    state.products.userProducts.find(prod => prod.id === prodId)
   );
   const dispatch = useDispatch();
 
@@ -112,7 +112,19 @@ const EditProductScreen = (props) => {
   }, [dispatch, prodId, formState]);
 
   useEffect(() => {
-    props.navigation.setParams({ submit: submitHandler });
+    props.navigation.setOptions({
+      headerRight: () => (
+        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+          <Item
+            title="Save"
+            iconName={
+              Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'
+            }
+            onPress={submitHandler}
+          />
+        </HeaderButtons>
+      ),
+    });
   }, [submitHandler]);
 
   const inputChangeHandler = useCallback(
@@ -130,37 +142,37 @@ const EditProductScreen = (props) => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size='large' color={Colors.primary} />
+        <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior='padding'
+      behavior="padding"
       keyboardVerticalOffset={100}
     >
       <ScrollView>
         <View style={styles.form}>
           <Input
-            id='title'
-            label='Title'
-            errorText='Please enter a valid title!'
-            keyboardType='default'
-            autoCapitalize='sentences'
+            id="title"
+            label="Title"
+            errorText="Please enter a valid title!"
+            keyboardType="default"
+            autoCapitalize="sentences"
             autoCorrect
-            returnKeyType='next'
+            returnKeyType="next"
             onInputChange={inputChangeHandler}
             initialValue={editedProduct ? editedProduct.title : ''}
             initiallyValid={!!editedProduct}
             required
           />
           <Input
-            id='imageUrl'
-            label='Image Url'
-            errorText='Please enter a valid image url!'
-            keyboardType='default'
-            returnKeyType='next'
+            id="imageUrl"
+            label="Image Url"
+            errorText="Please enter a valid image url!"
+            keyboardType="default"
+            returnKeyType="next"
             onInputChange={inputChangeHandler}
             initialValue={editedProduct ? editedProduct.imageUrl : ''}
             initiallyValid={!!editedProduct}
@@ -169,22 +181,22 @@ const EditProductScreen = (props) => {
 
           {editedProduct ? null : (
             <Input
-              id='price'
-              label='Price'
-              errorText='Please enter a valid price!'
-              keyboardType='decimal-pad'
-              returnKeyType='next'
+              id="price"
+              label="Price"
+              errorText="Please enter a valid price!"
+              keyboardType="decimal-pad"
+              returnKeyType="next"
               onInputChange={inputChangeHandler}
               required
               min={0.1}
             />
           )}
           <Input
-            id='description'
-            label='Description'
-            errorText='Please enter a valid description!'
-            keyboardType='default'
-            autoCapitalize='sentences'
+            id="description"
+            label="Description"
+            errorText="Please enter a valid description!"
+            keyboardType="default"
+            autoCapitalize="sentences"
             autoCorrect
             multiline
             numberOfLines={3}
@@ -200,23 +212,11 @@ const EditProductScreen = (props) => {
   );
 };
 
-EditProductScreen.navigationOptions = (navData) => {
-  const submitFn = navData.navigation.getParam('submit');
+export const screenOptions = navData => {
+  const submitFn = navData.route.params ? navData.route.params.submit : null;
+  const routeParams = navData.route.params ? navData.route.params : {};
   return {
-    headerTitle: navData.navigation.getParam('productId')
-      ? 'Edit Product'
-      : 'Add Product',
-    headerRight: (
-      <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item
-          title='Save'
-          iconName={
-            Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'
-          }
-          onPress={submitFn}
-        />
-      </HeaderButtons>
-    ),
+    headerTitle: routeParams.productId ? 'Edit Product' : 'Add Product',
   };
 };
 

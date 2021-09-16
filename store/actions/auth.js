@@ -4,18 +4,25 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // export const LOGIN = 'LOGIN';
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
+export const SET_DID_TRY_AL = 'SET_DID_TRY_AL';
 
 let timer;
 
-export const authenticate = (useId, token, expiryTime) => {
-  return (dispatch) => {
+export const setDidTryAL = () => {
+  return {
+    type: SET_DID_TRY_AL,
+  };
+};
+
+export const authenticate = (userId, token, expiryTime) => {
+  return dispatch => {
     dispatch(setLogoutTimer(expiryTime));
-    dispatch({ type: AUTHENTICATE, useId, token });
+    dispatch({ type: AUTHENTICATE, userId: userId, token: token });
   };
 };
 
 export const signup = (email, password) => {
-  return async (dispatch) => {
+  return async dispatch => {
     const response = await fetch(
       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCder0NStWAqMTwD1oQTdf11pbMNdh-S9E',
       {
@@ -57,7 +64,7 @@ export const signup = (email, password) => {
 };
 
 export const login = (email, password) => {
-  return async (dispatch) => {
+  return async dispatch => {
     const response = await fetch(
       'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCder0NStWAqMTwD1oQTdf11pbMNdh-S9E',
       {
@@ -112,8 +119,8 @@ const clearLogoutTimer = () => {
   }
 };
 
-const setLogoutTimer = (expirationTime) => {
-  return (dispatch) => {
+const setLogoutTimer = expirationTime => {
+  return dispatch => {
     timer = setTimeout(() => {
       dispatch(logout());
     }, expirationTime);

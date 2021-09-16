@@ -17,11 +17,11 @@ import * as cartActions from '../../store/actions/cart';
 import * as productsActions from '../../store/actions/products';
 import Colors from '../../constants/Colors';
 
-const ProductsOverviewScreen = (props) => {
+const ProductsOverviewScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(false);
-  const products = useSelector((state) => state.products.availableProducts);
+  const products = useSelector(state => state.products.availableProducts);
   const dispatch = useDispatch();
 
   const loadProducts = useCallback(async () => {
@@ -36,12 +36,9 @@ const ProductsOverviewScreen = (props) => {
   }, [dispatch, setIsLoading, setError]);
 
   useEffect(() => {
-    const willFocusSub = props.navigation.addListener(
-      'willFocus',
-      loadProducts
-    );
+    const unsubscribe = props.navigation.addListener('focus', loadProducts);
     return () => {
-      willFocusSub.remove();
+      unsubscribe();
     };
   }, [loadProducts]);
 
@@ -64,7 +61,7 @@ const ProductsOverviewScreen = (props) => {
       <View style={styles.centered}>
         <Text>An error occurred!</Text>
         <Button
-          title='Try Again'
+          title="Try Again"
           onPress={loadProducts}
           color={Colors.primary}
         />
@@ -75,7 +72,7 @@ const ProductsOverviewScreen = (props) => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size='large' color={Colors.primary} />
+        <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
@@ -92,8 +89,8 @@ const ProductsOverviewScreen = (props) => {
       onRefresh={loadProducts}
       refreshing={isRefreshing}
       data={products}
-      keyExtractor={(item) => item.id}
-      renderItem={(itemData) => (
+      keyExtractor={item => item.id}
+      renderItem={itemData => (
         <ProductItem
           image={itemData.item.imageUrl}
           title={itemData.item.title}
@@ -104,14 +101,14 @@ const ProductsOverviewScreen = (props) => {
         >
           <Button
             color={Colors.primary}
-            title='View Details'
+            title="View Details"
             onPress={() => {
               selectItemHandler(itemData.item.id, itemData.item.title);
             }}
           />
           <Button
             color={Colors.primary}
-            title='Add to Cart'
+            title="Add to Cart"
             onPress={() => {
               dispatch(cartActions.addToCart(itemData.item));
             }}
@@ -121,14 +118,14 @@ const ProductsOverviewScreen = (props) => {
     />
   );
 };
-ProductsOverviewScreen.navigationOptions = (navData) => {
+export const screenOptions = navData => {
   return {
     headerTitle: 'All Products',
     headerLeft: () => {
       return (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
           <Item
-            title='Menu'
+            title="Menu"
             iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
             onPress={() => {
               navData.navigation.toggleDrawer();
@@ -141,7 +138,7 @@ ProductsOverviewScreen.navigationOptions = (navData) => {
       return (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
           <Item
-            title='Cart'
+            title="Cart"
             iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
             onPress={() => {
               navData.navigation.navigate('Cart');

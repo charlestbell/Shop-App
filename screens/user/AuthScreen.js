@@ -41,7 +41,7 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const AuthScreen = (props) => {
+const AuthScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isSignup, setIsSignup] = useState(false);
@@ -83,7 +83,7 @@ const AuthScreen = (props) => {
     setIsLoading(true);
     try {
       await dispatch(action);
-      props.navigation.navigate('Shop');
+      // props.navigation.navigate('Shop');
     } catch (err) {
       setError(err.message);
       setIsLoading(false);
@@ -104,7 +104,7 @@ const AuthScreen = (props) => {
 
   return (
     <KeyboardAvoidingView
-      behavior='padding'
+      behavior="padding"
       keyboardVerticalOffset={50}
       style={styles.screen}
     >
@@ -112,31 +112,31 @@ const AuthScreen = (props) => {
         <Card style={styles.authContainer}>
           <ScrollView>
             <Input
-              id='email'
-              label='E-Mail'
-              keyboardType='email-address'
+              id="email"
+              label="E-Mail"
+              keyboardType="email-address"
               required
               email
-              autoCapitalize='none'
-              errorText='Please enter a valid email address.'
+              autoCapitalize="none"
+              errorText="Please enter a valid email address."
               onInputChange={inputChangeHandler}
-              initialValue=''
+              initialValue=""
             />
             <Input
-              id='password'
-              label='Password'
-              keyboardType='default'
+              id="password"
+              label="Password"
+              keyboardType="default"
               secureTextEntry
               required
               minLength={5}
-              autoCapitalize='none'
-              errorText='Please enter a valid password.'
+              autoCapitalize="none"
+              errorText="Please enter a valid password."
               onInputChange={inputChangeHandler}
-              initialValue=''
+              initialValue=""
             />
             <View style={styles.buttonContainer}>
               {isLoading ? (
-                <ActivityIndicator size='small' color={Colors.primary} />
+                <ActivityIndicator size="small" color={Colors.primary} />
               ) : (
                 <Button
                   title={isSignup ? 'Sign Up' : 'Login'}
@@ -150,7 +150,7 @@ const AuthScreen = (props) => {
                 title={isSignup ? 'Switch to Login' : 'Switch to Sign Up'}
                 color={Colors.accent}
                 onPress={() => {
-                  setIsSignup((prevState) => !prevState);
+                  setIsSignup(prevState => !prevState);
                 }}
               />
             </View>
@@ -161,7 +161,7 @@ const AuthScreen = (props) => {
   );
 };
 
-AuthScreen.navigationOptions = {
+export const screenOptions = {
   headerTitle: 'Authenticate',
 };
 

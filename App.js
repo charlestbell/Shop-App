@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import AppLoading from 'expo-app-loading';
-import * as Font from 'expo-font';
+import { useFonts } from 'expo-font';
 import ReduxThunk from 'redux-thunk';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -10,7 +10,7 @@ import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
 import ordersReducer from './store/reducers/orders';
 import authReducer from './store/reducers/auth';
-import NavigationContainer from './navigation/NavigationContainer';
+import AppNavigator from './navigation/AppNavigator';
 
 let composedMiddleWare = compose(applyMiddleware(ReduxThunk));
 if (__DEV__) {
@@ -26,31 +26,20 @@ const rootReducer = combineReducers({
 
 const store = createStore(rootReducer, composedMiddleWare);
 
-const fetchFonts = () => {
-  return Font.loadAsync({
+export default App = () => {
+  const [fontLoaded, setFontLoaded] = useState(false);
+  let [fontsLoaded] = useFonts({
     'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
   });
-};
 
-export default App = () => {
-  const [fontLoaded, setFontLoaded] = useState(false);
-
-  if (!fontLoaded) {
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
     return (
-      <AppLoading
-        startAsync={fetchFonts}
-        onFinish={() => {
-          setFontLoaded(true);
-        }}
-        onError={() => {}}
-      />
+      <Provider store={store}>
+        <AppNavigator />
+      </Provider>
     );
   }
-
-  return (
-    <Provider store={store}>
-      <NavigationContainer />
-    </Provider>
-  );
 };
